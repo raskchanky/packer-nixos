@@ -1,27 +1,25 @@
 { config, pkgs, ... }:
+
 {
   imports = [ ./hardware-configuration.nix ];
-  boot = {
-    loader = {
-      grub = {
-        enable = true;
-        version = 2;
-        device = "/dev/sda";
-        default = 1;
-      };
-    };
+
+  boot.loader.grub = {
+    enable = true;
+    version = 2;
+    device = "/dev/sda";
+    default = 1;
   };
-  fileSystems = {
-    / = {
-      device = "/dev/sda1";
-      label = "nixos";
-    };
-  };
+
+  networking.hostName = "nixos";
+
   services = {
     openssh.enable = true;
     dbus.enable = true;
+    virtualbox.enable = true;
   };
-  environment.systemPackages = [ pkgs.git pkgs.gnumake pkgs.gcc ];
+
+  environment.systemPackages = with pkgs; [ gcc git gnumake ];
+
   security.sudo.configFile =
     ''
       Defaults:root,%wheel env_keep+=LOCALE_ARCHIVE
@@ -32,18 +30,21 @@
       root   ALL=(ALL) SETENV: ALL
       %wheel ALL=(ALL) NOPASSWD: ALL, SETENV: ALL
     '';
-  users.extraGroups = { vagrant = { }; vboxsf = { }; };
-  users.extraUsers = {
-    vagrant = {
-      createHome = true;
-      extraGroups = [ "wheel" "vboxsf" "users" ];
-      group = "vagrant";
-      home = "/home/vagrant";
-      password = "vagrant";
+
+  users = {
+    extraGroups = [ { name = "vagrant"; } { name = "vboxsf"; } ];
+    extraUsers  = [ {
+      description     = "Vagrant User";
+      name            = "vagrant";
+      group           = "vagrant";
+      extraGroups     = [ "users" "vboxsf" "wheel" ];
+      password        = "vagrant";
+      home            = "/home/vagrant";
+      createHome      = true;
       useDefaultShell = true;
       openssh.authorizedKeys.keys = [
         "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA6NF8iallvQVp22WDkTkyrtvp9eWW6A8YVr+kz4TjGYe7gHzIw+niNltGEFHzD8+v1I2YJ6oXevct1YeS0o9HZyN1Q9qgCgzUFtdOKLv6IedplqoPkcmF0aYet2PkEDo3MlTBckFXPITAMzF8dJSIFo9D8HfdOV0IAdx4O7PtixWKn5y2hMNG0zQPyUecp4pzC6kivAIhyfHilFR61RGL+GPXQ2MWZWFYbAGjyiYJnAmCP3NOTd0jMZEnDkbUvxhMmBYSdETk1rRgm+R4LOzFUGaHqHDLKLX+FIPKcF96hrucXzcWyLbIbEgE98OHlnVYCzRdK8jlqm8tehUc9c9WhQ== vagrant insecure public key"
       ];
-    };
+    } ];
   };
 }

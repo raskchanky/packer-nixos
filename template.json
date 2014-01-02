@@ -26,7 +26,7 @@
       "mount LABEL=nixos /mnt<enter>",
       "nixos-generate-config --root /mnt<enter><wait>",
       "curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/configuration.nix > /mnt/etc/nixos/configuration.nix<enter><wait>",
-      "nixos-install && reboot<enter>",
+      "nixos-install && reboot<enter>"
     ],
     "boot_wait": "5s",
     "disk_size": 20000,
