@@ -35,5 +35,14 @@
       ["modifyvm", "{{.Name}}", "--memory", "1024"],
       ["modifyvm", "{{.Name}}", "--cpus", "1"]
     ]
+  }],
+  "provisioners": [{
+    "type": "shell",
+    "execute_command": "chmod +x {{.Path}}; sudo sh '{{.Path}}'",
+    "script": "postinstall.sh"
+  }],
+  "post-processors": [{
+    "type": "vagrant",
+    "output": "nixos-{{.BuildName}}-{{.Provider}}.box"
   }]
 }
