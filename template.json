@@ -26,7 +26,7 @@
       "mkfs.ext4 -j -L nixos /dev/sda1<enter><wait5>",
       "mount LABEL=nixos /mnt<enter>",
       "nixos-generate-config --root /mnt<enter><wait>",
-      "curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/configuration.nix > /mnt/etc/nixos/configuration.nix<enter><wait>",
+      "curl http://{{ .HTTPIP }}:{{ .HTTPPort }}/configuration.nix > /mnt/etc/nixos/configuration.nix<enter><wait>",
       "nixos-install && reboot<enter>"
     ],
     "boot_wait": "5s",
@@ -44,6 +44,6 @@
   }],
   "post-processors": [{
     "type": "vagrant",
-    "output": "nixos-{{.BuildName}}-{{.Provider}}.box"
+    "output": "nixos-13.10-{{.Provider}}.box"
   }]
 }

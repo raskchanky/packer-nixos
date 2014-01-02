@@ -7,7 +7,6 @@
     enable = true;
     version = 2;
     device = "/dev/sda";
-    default = 1;
   };
 
   networking.hostName = "nixos";
