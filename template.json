@@ -44,6 +44,6 @@
   }],
   "post-processors": [{
     "type": "vagrant",
-    "output": "nixos-13.10-{{.Provider}}.box"
+    "output": "nixos-13.10-x86_64.box"
   }]
 }
